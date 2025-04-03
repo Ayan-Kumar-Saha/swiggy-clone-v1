@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import RestaurantCard, { ShimmerRestaurantCard } from '../RestaurantCard/RestaurantCard';
 import './RestaurantList.css'
 import { useEffect, useState } from 'react';
@@ -8,7 +9,7 @@ const RestaurantList = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
 
-    useEffect(() => {        
+    useEffect(() => {
         async function fetchrestaurants() {
             if (searchTerm.length <= 3) return;
 
@@ -48,7 +49,10 @@ const RestaurantList = () => {
                     isLoading
                         ? Array.from({ length: 6 }, (_, index) => <ShimmerRestaurantCard key={index} />)
                         : listOfrestaurants.map(restaurant =>
-                            <RestaurantCard key={restaurant.card.card.info.id} {...restaurant} />
+                            <Link key={restaurant.card.card.info.id}
+                                to={'/restaurants/' + restaurant.card.card.info.id}>
+                                <RestaurantCard  {...restaurant} />
+                            </Link>
                         )
                 }
             </div>
