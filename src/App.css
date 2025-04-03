@@ -1,0 +1,14 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-family: 'Questrial', sans-serif;
+    font-size: 1rem;
+}
+
+.s-container {
+    @apply max-w-[850px] mx-auto mt-6;
+}
