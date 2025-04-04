@@ -1,8 +1,19 @@
 import { Link } from 'react-router';
 import './Navbar.css';
-import { LuBriefcase, LuSearch, LuLifeBuoy, LuBadgePercent, LuUser, LuShoppingBag } from "react-icons/lu";
+import { LuBriefcase, LuSearch, LuLifeBuoy, LuBadgePercent, LuUser, LuShoppingBag, LuChevronDown } from "react-icons/lu";
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
 
 const Navbar = () => {
+
+    const { isLoggedIn, userName, setUserContext } = useContext(UserContext);
+
+    const onSignIn = () => {
+        isLoggedIn
+            ? setUserContext({ isLoggedIn: false, userName: '' })
+            : setUserContext({ isLoggedIn: true, userName: 'Ayan Kumar Saha' })
+    }
+
     return (
         <div className='w-full shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]'>
             <div className='max-w-[1200px] mx-auto flex justify-between items-center py-4'>
@@ -11,6 +22,10 @@ const Navbar = () => {
                         <img className='rounded-md' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxbbFkbxmm68be0_zk2B_wrYa9YmWXeoo7kA&s' />
                     </div>
                 </Link>
+                {/* <div className='border'>
+                    <span>{locationName}</span>
+                    <LuChevronDown />
+                </div> */}
                 <nav className='w-2/3'>
                     <ul className='w-full flex justify-evenly items-center'>
                         <li className='nav-item'>
@@ -32,9 +47,9 @@ const Navbar = () => {
                             </li>
                         </Link>
 
-                        <li className='nav-item'>
+                        <li className='nav-item' onClick={onSignIn}>
                             <LuUser className='text-xl' />
-                            <span>Sign In</span>
+                            <span>{isLoggedIn ? userName.split(" ")[0] : 'Sign In'}</span>
                         </li>
                         <li className='nav-item'>
                             <LuShoppingBag className='text-xl' />

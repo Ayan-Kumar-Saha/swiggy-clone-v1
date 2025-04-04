@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, lazy, Suspense } from 'react';
+import React, { useEffect, useRef, lazy, Suspense, useState } from 'react';
 import ReactDOM from 'react-dom/client'
 import './App.css'
 import Navbar from './components/Navbar/Navbar';
@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router';
 import RestaurantDetails from './components/RestaurantDetails/RestaurantDetails';
 import useNetworkStatus from './hooks/useNetworkStatus';
 import toast, { Toaster } from 'react-hot-toast';
+import UserContext, { UserProvider } from './contexts/UserContext';
 
 const Support = lazy(() => import('./components/Support/Support'));
 
@@ -46,13 +47,15 @@ const App = () => {
     }, [isOnline])
 
     return (
-        <div className='app'>
-            <Navbar />
-            <div className='s-container'>
-                <Outlet />
+        <UserProvider>
+            <div className='app'>
+                <Navbar />
+                <div className='s-container'>
+                    <Outlet />
+                </div>
+                <Toaster position='bottom-center' />
             </div>
-            <Toaster position='bottom-center' />
-        </div>
+        </UserProvider>
     )
 }
 
