@@ -2,17 +2,14 @@ import { useEffect, useState } from "react";
 
 const useRestaurantList = (searchTerm) => {
 
-    console.log('Outside', searchTerm)
-
     const [listOfRestaurants, setListOfRestaurants] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+
+        if (searchTerm.length <= 3) return;
+
         async function fetchrestaurants() {
-
-            console.log('Inside', searchTerm);
-            if (searchTerm.length <= 3) return;
-
             setIsLoading(true);
 
             const data = await fetch(`https://www.swiggy.com/dapi/restaurants/search/v3?lat=22.867114&lng=88.3674381&str=${searchTerm}&submitAction=ENTER&selectedPLTab=RESTAURANT`);
@@ -22,7 +19,9 @@ const useRestaurantList = (searchTerm) => {
             setIsLoading(false);
         }
 
-        fetchrestaurants();
+        const timer = setTimeout(fetchrestaurants, 1000);
+        return () => clearTimeout(timer);
+
     }, [searchTerm])
 
     return [isLoading, listOfRestaurants];
