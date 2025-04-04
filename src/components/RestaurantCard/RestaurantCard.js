@@ -2,6 +2,17 @@ import { CLOUDINARY_GREYSCALE_IMAGE_BASE_URL, CLOUDINARY_IMAGE_BASE_URL } from '
 import './RestaurantCard.css'
 import { HiStar } from 'react-icons/hi'
 
+export const withPromotedLabel = (RestaurantCard) => {
+    return (props) => {
+        return (
+            <div className='relative'>
+                <span className='absolute top-6 left-3 bg-gray-600 text-sm text-white rounded-sm px-1'>Ad</span>
+                <RestaurantCard {...props} />
+            </div>
+        )
+    }
+}
+
 export const ShimmerRestaurantCard = () => (
     <div className="bg-white flex justify-evenly items-center py-6 gap-4 rounded-lg max-w-[400px] animate-pulse">
         <div className="w-1/3 max-w-[80px] rounded-lg bg-gray-200 h-20"></div>
@@ -13,14 +24,14 @@ export const ShimmerRestaurantCard = () => (
     </div>
 );
 
-const restaurantCard = (props) => {
+const RestaurantCard = (props) => {
     const { name, avgRating, costForTwo, cuisines, cloudinaryImageId, availability } = props.card.card.info;
     const { minDeliveryTime, maxDeliveryTime } = props.card.card.info.sla;
 
     return (
         <div className='bg-white flex justify-evenly items-center py-6 gap-4 rounded-lg max-w-[400px]'>
             <div className='w-1/3 max-w-[80px] rounded-lg'>
-                <img className='rounded-lg' src={ (availability.opened ? CLOUDINARY_IMAGE_BASE_URL : CLOUDINARY_GREYSCALE_IMAGE_BASE_URL) + cloudinaryImageId} />
+                <img className='rounded-lg' src={(availability.opened ? CLOUDINARY_IMAGE_BASE_URL : CLOUDINARY_GREYSCALE_IMAGE_BASE_URL) + cloudinaryImageId} />
             </div>
             <div className='w-2/3 flex flex-col'>
                 <h3 className='font-bold line-clamp-1'>{name}</h3>
@@ -44,4 +55,4 @@ const restaurantCard = (props) => {
 
 }
 
-export default restaurantCard;
+export default RestaurantCard;

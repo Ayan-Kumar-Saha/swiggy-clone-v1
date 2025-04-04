@@ -1,14 +1,15 @@
 import { Link } from 'react-router';
-import RestaurantCard, { ShimmerRestaurantCard } from '../RestaurantCard/RestaurantCard';
+import RestaurantCard, { ShimmerRestaurantCard, withPromotedLabel } from '../RestaurantCard/RestaurantCard';
 import './RestaurantList.css'
 import { useState, useEffect } from 'react';
 import useRestaurantList from '../../hooks/useRestaurantList';
-import { LuCross, LuSearch, LuX } from 'react-icons/lu';
+import { LuX } from 'react-icons/lu';
 
 const RestaurantList = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, listOfRestaurants] = useRestaurantList(searchTerm);
     const [filteredListOfRestaurants, setFilteredListofRestaurants] = useState([]);
+    const PromotedRestaurantCard = withPromotedLabel(RestaurantCard);
 
     const onClickTopRated = () => {
         let filteredRestaurants = listOfRestaurants.filter(res => res.card.card.info.avgRating > 4);
@@ -50,7 +51,11 @@ const RestaurantList = () => {
                         : filteredListOfRestaurants?.map(restaurant =>
                             <Link key={restaurant.card.card.info.id}
                                 to={'/restaurants/' + restaurant.card.card.info.id}>
-                                <RestaurantCard  {...restaurant} />
+                                {
+                                    restaurant.card.card.info.promoted
+                                        ? <PromotedRestaurantCard {...restaurant} />
+                                        : <RestaurantCard  {...restaurant} />
+                                }
                             </Link>
                         )
                 }
