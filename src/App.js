@@ -1,14 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client'
 import './App.css'
 import Navbar from './components/Navbar/Navbar';
-import Support from './components/Support/Support';
 import RestaurantList from './components/RestaurantList/RestaurantList';
 import Error from './components/Error/Error'
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router';
 import RestaurantDetails from './components/RestaurantDetails/RestaurantDetails';
 import useNetworkStatus from './hooks/useNetworkStatus';
 import toast, { Toaster } from 'react-hot-toast';
+
+const Support = lazy(() => import('./components/Support/Support'));
 
 const App = () => {
     const isOnline = useNetworkStatus();
@@ -66,7 +67,11 @@ const appRouter = createBrowserRouter([
             },
             {
                 path: '/support',
-                element: <Support />
+                element: (
+                    <Suspense fallback={<h1>Loading...</h1>}>
+                        <Support />
+                    </Suspense>
+                )
             },
             {
                 path: '/restaurants/:restaurantId',
