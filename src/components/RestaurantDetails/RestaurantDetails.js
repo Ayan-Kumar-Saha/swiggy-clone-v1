@@ -2,6 +2,7 @@ import MenuItemCategory, { ShimmerMenuItemCategory } from '../MenuItemCategory/M
 import './RestaurantDetails.css';
 import { useParams } from 'react-router';
 import useRestaurantDetails from '../../hooks/useRestaurantDetails';
+import { useState } from 'react';
 
 
 const ShimmerRestaurantDetails = () => {
@@ -18,6 +19,7 @@ const ShimmerRestaurantDetails = () => {
 const RestaurantDetails = () => {
 
     const { restaurantId } = useParams();
+    const [expandedIndex, setExpandedIndex] = useState(0);
     const restaurantDetails = useRestaurantDetails(restaurantId);
 
     const name = restaurantDetails?.cards[0]?.card?.card?.text;
@@ -30,8 +32,15 @@ const RestaurantDetails = () => {
     return (
         <div className='px-4 mt-8' >
             <h1 className='text-3xl font-bold mb-4'>{name}</h1>
-            <div className='bg-[#f4f7f8]'>
-                {itemGroups?.map(group => <MenuItemCategory key={group?.card?.card?.categoryId} {...group?.card?.card} />)}
+            <div className='bg-[#f2f2f3]'>
+                {
+                    itemGroups?.map(
+                        (group, index) => <MenuItemCategory key={group?.card?.card?.categoryId}
+                            itemCategory={group?.card?.card}
+                            expand={index === expandedIndex}
+                            setExpand={() => index !== expandedIndex ? setExpandedIndex(index) : setExpandedIndex(-1)} />
+                    )
+                }
             </div>
         </ div>
     );

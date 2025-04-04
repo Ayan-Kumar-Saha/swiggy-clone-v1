@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import MenuItem from '../MenuItem/MenuItem';
 import './MenuItemCategory.css';
-import { LuChevronDown } from 'react-icons/lu';
+import { LuChevronDown, LuChevronUp } from 'react-icons/lu';
 import { ShimmerMenuItem } from '../MenuItem/MenuItem';
 
 
@@ -22,20 +23,24 @@ export const ShimmerMenuItemCategory = () => {
 }
 
 
-const MenuItemCategory = (itemCategory) => {
+const MenuItemCategory = ({ itemCategory, expand, setExpand }) => {
 
     const { title, itemCards } = itemCategory;
 
     return (
-        <div className='bg-white py-4'>
-            <div className='flex justify-between items-center mb-4'>
-                <span className='text-lg font-bold'>{title} ({itemCards?.length})</span>
-                <LuChevronDown className='text-2xl cursor-pointer' />
+        <div className='bg-white my-4'>
+            <div className='flex justify-between items-center my-2'>
+                <span className='text-lg font-bold mt-4'>{title} ({itemCards?.length})</span>
+                {
+                    expand
+                        ? <LuChevronUp className='text-2xl cursor-pointer' onClick={setExpand} />
+                        : <LuChevronDown className='text-2xl cursor-pointer' onClick={setExpand} />
+                }
             </div>
 
             <div className='flex flex-col gap-4'>
                 {
-                    itemCards?.map(item => <MenuItem key={item?.card?.info?.id} {...item?.card?.info} />)
+                    expand && itemCards?.map(item => <MenuItem key={item?.card?.info?.id} {...item?.card?.info} />)
                 }
             </div>
         </div>
