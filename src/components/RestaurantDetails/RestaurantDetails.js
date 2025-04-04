@@ -21,7 +21,7 @@ const RestaurantDetails = () => {
     const restaurantDetails = useRestaurantDetails(restaurantId);
 
     const name = restaurantDetails?.cards[0]?.card?.card?.text;
-    const itemGroups = restaurantDetails?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.filter(card => card?.card?.card?.categoryId)
+    const itemGroups = restaurantDetails?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.filter(card => card?.card?.card?.categoryId) || []
 
     if (!restaurantDetails) {
         return <ShimmerRestaurantDetails />

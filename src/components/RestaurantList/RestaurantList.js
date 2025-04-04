@@ -1,33 +1,23 @@
 import { Link } from 'react-router';
 import RestaurantCard, { ShimmerRestaurantCard } from '../RestaurantCard/RestaurantCard';
 import './RestaurantList.css'
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import useRestaurantList from '../../hooks/useRestaurantList';
+import { LuCross, LuSearch, LuX } from 'react-icons/lu';
 
 const RestaurantList = () => {
-
-    const [listOfrestaurants, setListOfrestaurants] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-
-    useEffect(() => {
-        async function fetchrestaurants() {
-            if (searchTerm.length <= 3) return;
-
-            setIsLoading(true);
-
-            const data = await fetch(`https://www.swiggy.com/dapi/restaurants/search/v3?lat=22.867114&lng=88.3674381&str=${searchTerm}&submitAction=ENTER&selectedPLTab=RESTAURANT`);
-            let jsonData = await data.json();
-
-            setListOfrestaurants(jsonData?.data?.cards[0]?.groupedCard?.cardGroupMap?.RESTAURANT?.cards);
-            setIsLoading(false);
-        }
-
-        fetchrestaurants();
-    }, [searchTerm]);
+    const [isLoading, listOfRestaurants] = useRestaurantList(searchTerm);
+    const [filteredListOfRestaurants, setFilteredListofRestaurants] = useState([]);
 
     const onClickTopRated = () => {
-        setListOfrestaurants(listOfrestaurants.filter(res => res.card.card.info.avgRating > 4))
+        let filteredRestaurants = listOfRestaurants.filter(res => res.card.card.info.avgRating > 4);
+        setFilteredListofRestaurants(filteredRestaurants);
     }
+
+    useEffect(() => {
+        setFilteredListofRestaurants(listOfRestaurants);
+    }, [listOfRestaurants]);
 
     return (
         <>
@@ -37,9 +27,18 @@ const RestaurantList = () => {
                     placeholder='Search for restaurants and food'
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)} />
+
+                {
+                    searchTerm && (
+                        <div className='flex justify-center items-center w-[20px] h-[20px] cursor-pointer'
+                            onClick={() => setSearchTerm("")}>
+                            <LuX className='text-2xl' />
+                        </div>
+                    )
+                }
             </div>
             {
-                listOfrestaurants.length > 0 &&
+                filteredListOfRestaurants?.length > 0 &&
                 <div className='flex my-4'>
                     <button className='filter-btn' onClick={onClickTopRated}>Rated 4+</button>
                 </div>
@@ -48,7 +47,7 @@ const RestaurantList = () => {
                 {
                     isLoading
                         ? Array.from({ length: 6 }, (_, index) => <ShimmerRestaurantCard key={index} />)
-                        : listOfrestaurants.map(restaurant =>
+                        : filteredListOfRestaurants?.map(restaurant =>
                             <Link key={restaurant.card.card.info.id}
                                 to={'/restaurants/' + restaurant.card.card.info.id}>
                                 <RestaurantCard  {...restaurant} />
