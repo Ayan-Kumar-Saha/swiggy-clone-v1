@@ -9,12 +9,16 @@ import RestaurantDetails from './components/RestaurantDetails/RestaurantDetails'
 import useNetworkStatus from './hooks/useNetworkStatus';
 import toast, { Toaster } from 'react-hot-toast';
 import UserContext, { UserProvider } from './contexts/UserContext';
+import { Provider } from 'react-redux';
+import appStore from './redux/store';
+import Cart from './components/Cart/Cart';
 
 const Support = lazy(() => import('./components/Support/Support'));
 
 const App = () => {
     const isOnline = useNetworkStatus();
     const isFirstRender = useRef(true);
+
 
     useEffect(() => {
         if (isFirstRender.current) {
@@ -47,15 +51,17 @@ const App = () => {
     }, [isOnline])
 
     return (
-        <UserProvider>
-            <div className='app'>
-                <Navbar />
-                <div className='s-container'>
-                    <Outlet />
+        <Provider store={appStore}>
+            <UserProvider>
+                <div className='app'>
+                    <Navbar />
+                    <div className='s-container'>
+                        <Outlet />
+                    </div>
+                    <Toaster position='bottom-center' />
                 </div>
-                <Toaster position='bottom-center' />
-            </div>
-        </UserProvider>
+            </UserProvider>
+        </Provider>
     )
 }
 
@@ -79,6 +85,10 @@ const appRouter = createBrowserRouter([
             {
                 path: '/restaurants/:restaurantId',
                 element: <RestaurantDetails />
+            },
+            {
+                path: '/cart',
+                element: <Cart />
             }
         ],
         errorElement: <Error />

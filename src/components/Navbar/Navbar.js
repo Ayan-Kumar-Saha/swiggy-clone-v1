@@ -3,10 +3,12 @@ import './Navbar.css';
 import { LuBriefcase, LuSearch, LuLifeBuoy, LuBadgePercent, LuUser, LuShoppingBag, LuChevronDown } from "react-icons/lu";
 import { useContext } from 'react';
 import UserContext from '../../contexts/UserContext';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
 
     const { isLoggedIn, userName, setUserContext } = useContext(UserContext);
+    const cartItems = useSelector((state) => state.cart.items)
 
     const onSignIn = () => {
         isLoggedIn
@@ -51,10 +53,12 @@ const Navbar = () => {
                             <LuUser className='text-xl' />
                             <span>{isLoggedIn ? userName.split(" ")[0] : 'Sign In'}</span>
                         </li>
-                        <li className='nav-item'>
-                            <LuShoppingBag className='text-xl' />
-                            <span>Cart</span>
-                        </li>
+                        <Link to="/cart">
+                            <li className='nav-item'>
+                                <LuShoppingBag className='text-xl' />
+                                <span>Cart [{cartItems?.length}]</span>
+                            </li>
+                        </Link>
                     </ul>
                 </nav>
             </div>

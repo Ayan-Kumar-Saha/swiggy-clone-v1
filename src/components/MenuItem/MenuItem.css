@@ -1,0 +1,7 @@
+.action-btn-container {
+    @apply absolute bottom-1 left-7 h-10 w-24 font-bold bg-white text-green-700 rounded-md hover:bg-white/95;
+}
+
+.action-btn {
+    @apply bg-white text-green-700
+}
